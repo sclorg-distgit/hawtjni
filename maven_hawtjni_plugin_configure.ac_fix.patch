@@ -1,0 +1,19 @@
+diff --git a/hawtjni-1.6/maven-hawtjni-plugin/src/main/resources/project-template/configure.ac b/hawtjni-1.6/maven-hawtjni-plugin/src/main/resources/project-template/configure.ac
+index 4e1a2b5..06e758e 100644
+--- a/hawtjni-1.6/maven-hawtjni-plugin/src/main/resources/project-template/configure.ac
++++ b/hawtjni-1.6/maven-hawtjni-plugin/src/main/resources/project-template/configure.ac
+@@ -26,6 +26,7 @@ AC_CONFIG_SRCDIR([@FIRST_SOURCE_FILE@])
+ AC_CONFIG_HEADERS([src/config.h])
+ AC_CANONICAL_HOST
+ AC_CANONICAL_SYSTEM
++m4_pattern_allow([AM_PROG_AR], [AM_PROG_AR])
+ 
+ ## -----------------------------------------------
+ ## Application Checks
+@@ -63,4 +64,4 @@ echo "
+   Prefix.........: $prefix
+   C Compiler.....: $CC $CFLAGS
+   Linker.........: $LD $LDFLAGS $LIBS
+-"
+\ No newline at end of file
++"

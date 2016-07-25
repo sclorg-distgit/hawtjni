@@ -1,0 +1,85 @@
+From 226e8614bd078479c3f99712f63f6dfbf1c46b0c Mon Sep 17 00:00:00 2001
+From: Stanislav Ochotnicky <sochotnicky@redhat.com>
+Date: Thu, 19 Jan 2012 17:12:16 +0100
+Subject: [PATCH 1/3] Fix shading and remove unneeded modules
+
+---
+ hawtjni-generator/pom.xml    |   28 ----------------------------
+ maven-hawtjni-plugin/pom.xml |    7 +++++++
+ pom.xml                      |    2 --
+ 3 files changed, 7 insertions(+), 30 deletions(-)
+
+diff --git a/hawtjni-generator/pom.xml b/hawtjni-generator/pom.xml
+index fac8cc2..35b8aaa 100644
+--- a/hawtjni-generator/pom.xml
++++ b/hawtjni-generator/pom.xml
+@@ -68,32 +68,4 @@
+     </dependency>
+   </dependencies>
+   
+-  <build>
+-    <plugins>
+-      
+-      <!-- include all the dependencies into the jar so it can run standalone -->
+-      <plugin>
+-        <groupId>org.apache.maven.plugins</groupId>
+-        <artifactId>maven-shade-plugin</artifactId>
+-        <version>1.3</version>
+-        <executions>
+-          <execution>
+-            <phase>package</phase>
+-            <goals>
+-              <goal>shade</goal>
+-            </goals>
+-            <configuration>
+-              <artifactSet>
+-                <excludes>
+-                  <exclude>junit:junit</exclude>
+-                </excludes>
+-              </artifactSet>
+-            </configuration>
+-          </execution>
+-        </executions>
+-      </plugin>
+-      
+-    </plugins>
+-  </build>
+-
+ </project>
+diff --git a/maven-hawtjni-plugin/pom.xml b/maven-hawtjni-plugin/pom.xml
+index 8ef99be..c0f4109 100644
+--- a/maven-hawtjni-plugin/pom.xml
++++ b/maven-hawtjni-plugin/pom.xml
+@@ -74,9 +74,16 @@
+ 
+     <dependency>
+       <groupId>org.apache.maven</groupId>
++      <artifactId>maven-compat</artifactId>
++      <version>3.0.3</version>
++    </dependency>
++
++    <dependency>
++      <groupId>org.apache.maven</groupId>
+       <artifactId>maven-artifact-manager</artifactId>
+       <version>2.0</version>
+     </dependency>
++
+     <dependency>
+       <groupId>org.apache.maven</groupId>
+       <artifactId>maven-artifact</artifactId>
+diff --git a/pom.xml b/pom.xml
+index fe2e17b..dfad938 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -210,8 +210,6 @@
+     <module>hawtjni-runtime</module>
+     <module>hawtjni-generator</module>
+     <module>maven-hawtjni-plugin</module>
+-    <module>hawtjni-example</module>
+-    <module>hawtjni-website</module>
+   </modules>
+ 
+ </project>
+-- 
+1.7.7.4
+

@@ -1,0 +1,58 @@
+From 7c6b1e1f5ed08361d3926e672a5a5129ee51c6d3 Mon Sep 17 00:00:00 2001
+From: Hiram Chirino <hiram@hiramchirino.com>
+Date: Mon, 9 Sep 2013 11:31:08 -0400
+Subject: [PATCH 5/5] Should fix issue #7.  We now do a write barrier before
+ setting the 'cached' field to 1 so that reader don't see this get re-ordered
+ before all the fields are readable.
+
+---
+ .../hawtjni/generator/StructsGenerator.java           |  2 ++
+ hawtjni-generator/src/main/resources/hawtjni.h        | 19 +++++++++++++++++++
+ 2 files changed, 21 insertions(+)
+
+diff --git a/hawtjni-generator/src/main/java/org/fusesource/hawtjni/generator/StructsGenerator.java b/hawtjni-generator/src/main/java/org/fusesource/hawtjni/generator/StructsGenerator.java
+index d8d591e..c12063c 100755
+--- a/hawtjni-generator/src/main/java/org/fusesource/hawtjni/generator/StructsGenerator.java
++++ b/hawtjni-generator/src/main/java/org/fusesource/hawtjni/generator/StructsGenerator.java
+@@ -240,6 +240,8 @@ public class StructsGenerator extends JNIGenerator {
+                 output("\"");
+             outputln(");");
+         }
++        // Makes sure compiler/cpu does not reorder the following write before the previous updates are done.
++        outputln("\thawtjni_w_barrier();");
+         output("\t");
+         output(simpleName);
+         outputln("Fc.cached = 1;");
+diff --git a/hawtjni-generator/src/main/resources/hawtjni.h b/hawtjni-generator/src/main/resources/hawtjni.h
+index 79ae703..c8ba601 100755
+--- a/hawtjni-generator/src/main/resources/hawtjni.h
++++ b/hawtjni-generator/src/main/resources/hawtjni.h
+@@ -168,6 +168,25 @@ void throwOutOfMemory(JNIEnv *env);
+   #endif 
+ #endif /* JNI64 */
+ 
++#ifdef __GNUC__
++  #define hawtjni_w_barrier() __sync_synchronize()
++#elif defined(SOLARIS2) && SOLARIS2 >= 10
++  #include <mbarrier.h>
++  #define hawtjni_w_barrier() __machine_w_barrier()
++#elif defined(__APPLE__)
++  #include <libkern/OSAtomic.h>
++  #define hawtjni_w_barrier() OSMemoryBarrier()
++#elif defined(_WIN32) || defined(_WIN64)
++  #include <intrin.h>
++  #define hawtjni_w_barrier() _mm_sfence(); _WriteBarrier()
++#else
++  #pragma message ( "Don't know how to do a memory barrier on this platform" )
++  #define hawtjni_w_barrier()
++#endif
++
++void hawtjni_atomic_set(jlong *target, jlong value);
++jlong hawtjni_atomic_get(jlong *target);
++
+ #ifdef __cplusplus
+ }
+ #endif 
+-- 
+1.8.1.4
+

@@ -3,7 +3,7 @@
 
 Name:             %{?scl_prefix}hawtjni
 Version:          1.6
-Release:          14%{?dist}
+Release:          17%{?dist}
 Summary:          Code generator that produces the JNI code
 License:          ASL 2.0 and EPL and BSD
 URL:              http://hawtjni.fusesource.org/
@@ -22,17 +22,16 @@ Patch4:           0005-Should-fix-issue-7.-We-now-do-a-write-barrier-before.patc
 Patch5:           0006-Simplify-shared-lib-extraction.patch
 Patch6:           maven_hawtjni_plugin_configure.ac_fix.patch
 
-BuildRequires:    java-devel
-BuildRequires:    maven-local
-BuildRequires:    maven-plugin-plugin
-BuildRequires:    maven-surefire-report-plugin
-BuildRequires:    maven-project-info-reports-plugin
-BuildRequires:    maven-plugin-jxr
-BuildRequires:    plexus-containers-component-metadata
-BuildRequires:    log4j
-BuildRequires:    fusesource-pom
-BuildRequires:    felix-parent
-BuildRequires:    %{?scl_prefix}xbean
+BuildRequires:    maven30-maven-local
+BuildRequires:    maven30-maven-plugin-plugin
+BuildRequires:    maven30-maven-surefire-report-plugin
+BuildRequires:    maven30-maven-project-info-reports-plugin
+BuildRequires:    maven30-maven-plugin-jxr
+BuildRequires:    maven30-plexus-containers-component-metadata
+BuildRequires:    maven30-log4j
+BuildRequires:    maven30-fusesource-pom
+BuildRequires:    maven30-felix-parent
+BuildRequires:    maven30-xbean
 BuildRequires:    %{?scl_prefix}apache-commons-cli
 BuildRequires:    %{?scl_prefix}mvn(asm:asm)
 BuildRequires:    %{?scl_prefix}mvn(asm:asm-commons)
@@ -57,18 +56,20 @@ JNI code which powers the eclipse platform.
 
 %package javadoc
 Summary:          Javadocs for %{name}
+%{?scl:Requires: %scl_runtime}
 
 %description javadoc
 This package contains the API documentation for %{name}.
 
 %package -n %{?scl_prefix}maven-%{pkg_name}-plugin
 Summary:          Use HawtJNI from a maven plugin
+%{?scl:Requires: %scl_runtime}
 
 %description -n %{?scl_prefix}maven-%{pkg_name}-plugin
 This package allows to use HawtJNI from a maven plugin.
 
 %prep
-. /opt/rh/%{scl}/enable
+%{?scl:scl enable maven30 %{scl} - << "EOF"}
 %setup -q -n %{pkg_name}-%{version}
 %patch0 -p1
 %patch1 -p1
@@ -79,14 +80,17 @@ This package allows to use HawtJNI from a maven plugin.
 %patch6 -p2
 %mvn_file ":{*}" @1
 %mvn_package ":*{plugin}" @1
+%{?scl:EOF}
 
 %build
-. /opt/rh/%{scl}/enable
+%{?scl:scl enable maven30 %{scl} - << "EOF"}
 %mvn_build
+%{?scl:EOF}
 
 %install
-. /opt/rh/%{scl}/enable
+%{?scl:scl enable maven30 %{scl} - << "EOF"}
 %mvn_install
+%{?scl:EOF}
 
 %files -f .mfiles
 %doc readme.md license.txt changelog.md
@@ -98,6 +102,16 @@ This package allows to use HawtJNI from a maven plugin.
 %doc license.txt
 
 %changelog
+* Wed Jun 25 2014 Severin Gehwolf <sgehwolf@redhat.com>  - 1.6-17
+- Add scl-runtime dependency to the hawtjni maven plugin
+  package.
+
+* Tue Jun 17 2014 Severin Gehwolf <sgehwolf@redhat.com>  - 1.6-16
+- Build against maven30 collection.
+
+* Wed Nov 27 2013 Severin Gehwolf <sgehwolf@redhat.com>  - 1.6-15
+- Properly enable SCL.
+
 * Wed Nov 20 2013 Severin Gehwolf <sgehwolf@redhat.com>  - 1.6-14
 - Add version to manual provides.
 

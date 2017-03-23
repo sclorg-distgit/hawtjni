@@ -1,0 +1,25 @@
+From 6ffdfd242299afb283d619c8ff9d5ce96853f160 Mon Sep 17 00:00:00 2001
+From: Stanislav Ochotnicky <sochotnicky@redhat.com>
+Date: Thu, 19 Jan 2012 17:12:42 +0100
+Subject: [PATCH 2/3] Fix xbean compatibility
+
+---
+ .../org/fusesource/hawtjni/generator/HawtJNI.java  |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/hawtjni-generator/src/main/java/org/fusesource/hawtjni/generator/HawtJNI.java b/hawtjni-generator/src/main/java/org/fusesource/hawtjni/generator/HawtJNI.java
+index b4727c2..bf710eb 100755
+--- a/hawtjni-generator/src/main/java/org/fusesource/hawtjni/generator/HawtJNI.java
++++ b/hawtjni-generator/src/main/java/org/fusesource/hawtjni/generator/HawtJNI.java
+@@ -402,7 +402,7 @@ public class HawtJNI {
+     
+     @SuppressWarnings("unchecked")
+     private void collectMatchingClasses(ClassFinder finder, Class annotation, LinkedHashSet<Class<?>> collector) {
+-        List<Class> annotated = finder.findAnnotatedClasses(annotation);
++        List<Class<?>> annotated = finder.findAnnotatedClasses(annotation);
+         for (Class<?> clazz : annotated) {
+             if( packages.isEmpty() ) {
+                 collector.add(clazz);
+-- 
+1.7.7.4
+

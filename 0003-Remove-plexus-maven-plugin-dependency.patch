@@ -1,0 +1,32 @@
+From 61963f6f7827459c551a03985e273d5feb65e55c Mon Sep 17 00:00:00 2001
+From: Stanislav Ochotnicky <sochotnicky@redhat.com>
+Date: Thu, 19 Jan 2012 17:13:50 +0100
+Subject: [PATCH 3/3] Remove plexus-maven-plugin dependency
+
+---
+ maven-hawtjni-plugin/pom.xml |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/maven-hawtjni-plugin/pom.xml b/maven-hawtjni-plugin/pom.xml
+index c0f4109..efdd192 100644
+--- a/maven-hawtjni-plugin/pom.xml
++++ b/maven-hawtjni-plugin/pom.xml
+@@ -139,12 +139,12 @@
+       </plugin>
+       <plugin>
+         <groupId>org.codehaus.plexus</groupId>
+-        <artifactId>plexus-maven-plugin</artifactId>
+-        <version>1.3.8</version>
++        <artifactId>plexus-component-metadata</artifactId>
++        <version>1.5.5</version>
+         <executions>
+           <execution>
+             <goals>
+-              <goal>descriptor</goal>
++              <goal>generate-metadata</goal>
+             </goals>
+           </execution>
+         </executions>
+-- 
+1.7.7.4
+

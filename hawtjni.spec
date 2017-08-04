@@ -3,7 +3,7 @@
 
 Name:             %{?scl_prefix}hawtjni
 Version:          1.15
-Release:          1.1%{?dist}
+Release:          1.2%{?dist}
 Summary:          Code generator that produces the JNI code
 License:          ASL 2.0 and EPL and BSD
 URL:              http://hawtjni.fusesource.org/
@@ -96,6 +96,9 @@ popd
 %files -n %{?scl_prefix}maven-hawtjni-plugin -f .mfiles-maven-plugin
 
 %changelog
+* Thu Jun 22 2017 Michael Simacek <msimacek@redhat.com> - 1.15-1.2
+- Mass rebuild 2017-06-22
+
 * Wed Jun 21 2017 Java Maintainers <java-maint@redhat.com> - 1.15-1.1
 - Automated package import and SCL-ization
 
